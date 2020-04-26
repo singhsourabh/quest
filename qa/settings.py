@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -38,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
+    'userauth',
+    # 'core',
     'frontend',
 ]
 
@@ -82,6 +87,8 @@ DATABASES = {
     }
 }
 
+# User Model
+AUTH_USER_MODEL = "userauth.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -120,3 +127,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30)
+}
