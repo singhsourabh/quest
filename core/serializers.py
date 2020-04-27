@@ -37,27 +37,3 @@ class CommentSerializer(serializers.ModelSerializer):
                   'upvote', 'downvote', 'spam']
         extra_kwargs = {'spam': {'read_only': True},
                         'created_by': {'required': False, 'read_only': True}}
-
-
-# class PostDetailsSerializer(serializers.ModelSerializer):
-#     seen = serializers.IntegerField(read_only=True)
-#     upvote = serializers.IntegerField(read_only=True)
-#     downvote = serializers.IntegerField(read_only=True)
-
-#     class Meta:
-#         model = Post
-#         fields = ['id', 'title', 'created_by', 'details',
-#                   'seen', 'upvote', 'downvote', 'spam']
-#         extra_kwargs = {'spam': {'read_only': True},
-#                         'created_by': {'required': False}}
-
-
-# class ResponseDetailsSerializer(serializers.ModelSerializer):
-#     upvote = serializers.IntegerField(read_only=True)
-#     downvote = serializers.IntegerField(read_only=True)
-
-#     class Meta:
-#         model = Response
-#         fields = ['id', 'response', 'created_by', 'upvote', 'downvote', 'spam']
-#         extra_kwargs = {'spam': {'read_only': True},
-#                         'created_by': {'required': False}}
