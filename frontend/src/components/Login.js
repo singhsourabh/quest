@@ -6,11 +6,9 @@ class Login extends Component {
       <div className="container">
         <div className="row">
           <form className="col s12 m8 l6 offset-m2 offset-l3">
-            <div className="card-panel">
+            <div className="card-panel auth-card">
               <div className="center-align teal-text">
-                <h3 className="login-heading">
-                  <b>Login</b>
-                </h3>
+                <h3 className="auth-heading">Login</h3>
               </div>
               <div className="input-field">
                 <input

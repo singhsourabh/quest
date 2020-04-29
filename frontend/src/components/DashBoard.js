@@ -1,26 +1,22 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { getPosts } from "./../actions/posts";
 
 class DashBoard extends Component {
+  componentDidMount() {
+    this.props.getPosts();
+  }
   render() {
     return (
       <div className="container">
-        {/* <div className="ui secondary pointing menu">
-          <div class="ui item">
-            <div className="ui icon input">
-              <input type="text" placeholder="Search..." />
-              <i className="search link icon"></i>
-            </div>
-          </div>
-          <div className="right menu">
-            <a className="ui item">Logout</a>
-          </div>
-        </div> */}
-        <div className="ui segment">
-          <p>helllohvueshdr</p>
-        </div>
+        <h1>welcome</h1>
       </div>
     );
   }
 }
 
-export default DashBoard;
+const mapStateToProps = (state) => ({
+  posts: state.posts.posts,
+});
+
+export default connect(mapStateToProps, { getPosts })(DashBoard);
