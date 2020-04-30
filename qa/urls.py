@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/login', auth_api.Login.as_view()),
     path('api/register', auth_api.Register.as_view()),
     path('api/change-password', auth_api.Change_Password.as_view()),
+    path('api/user', auth_api.UserProfile.as_view()),
     path('api/posts', core_api.PostList.as_view()),
     path('api/post/<uuid:pk>', core_api.PostDetails.as_view()),
     path('api/responses/<uuid:post_id>', core_api.ResponseList.as_view()),

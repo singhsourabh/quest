@@ -9,7 +9,8 @@ from rest_framework.status import (
     HTTP_401_UNAUTHORIZED
 )
 from django.contrib.auth import get_user_model
-from .serializers import LoginSerializer, ChangePasswordSerializer, UserRegisterSerializer
+from .serializers import (
+    LoginSerializer, ChangePasswordSerializer, UserRegisterSerializer, UserSerializer)
 from rest_framework import exceptions
 from django.db.models import Q
 
@@ -42,7 +43,7 @@ class Login(APIView):
                 status=HTTP_200_OK
             )
         return Response(
-            {'error': 'Invalid Credentials'},
+            {'detail': 'Invalid Credentials'},
             content_type="application/json",
             status=HTTP_401_UNAUTHORIZED
         )
@@ -72,3 +73,11 @@ class Change_Password(APIView):
         user.set_password(data['new_password'])
         user.save()
         return Response({"message": "Password updated successfully."})
+
+
+class UserProfile(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user

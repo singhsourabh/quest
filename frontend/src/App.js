@@ -1,22 +1,31 @@
 import React, { Component } from "react";
-import Navbar from "./components/Navbar";
-import Dashboard from "./components/DashBoard";
 import "./styles/App.css";
-import "./components/Login";
-import "./components/Register";
-import Login from "./components/Login";
-import Register from "./components/Register";
+
+import Navbar from "./components/common/Navbar";
+import Dashboard from "./components/DashBoard";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import ErrorToast from "./components/common/ErrorToast";
+
 import { Provider } from "react-redux";
 import store from "./store";
+import { loadUser } from "./actions/auth";
+
 import { BrowserRouter, Route } from "react-router-dom";
+import PrivateRoute from "./components/common/PrivateRoute";
+
 class App extends Component {
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
   render() {
     return (
       <Provider store={store}>
         <React.Fragment>
+          <ErrorToast />
           <BrowserRouter>
             <Navbar />
-            <Route path="/" exact component={Dashboard} />
+            <PrivateRoute path="/" exact component={Dashboard} />
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
           </BrowserRouter>

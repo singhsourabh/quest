@@ -7,9 +7,11 @@ User = get_user_model()
 
 class LoginSerializer(serializers.Serializer):
     login_id = serializers.CharField(required=True, error_messages={
-        'required': 'Must include username or email.'})
+                                     'required': 'Must include username or email.',
+                                     'blank': 'Must include username or email.'})
     password = serializers.CharField(required=True, error_messages={
-                                     'required': 'Must include password.'})
+                                     'required': 'Must include password.',
+                                     'blank': 'Must include password.'})
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -45,3 +47,9 @@ class ChangePasswordSerializer(serializers.Serializer):
                                          'required': 'Must include new password.'})
     new_password1 = serializers.CharField(required=True, error_messages={
                                           'required': 'Must confirm new password.'})
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', ]

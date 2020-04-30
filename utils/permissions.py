@@ -15,5 +15,4 @@ class IsOwner(BasePermission):
 
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
-        print(SAFE_METHODS)
         return request.method in SAFE_METHODS
