@@ -16,7 +16,7 @@ class Post(TimeStamp):
     spam = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-_created_at']
 
     def __str__(self):
         return self.title[:25]
@@ -31,7 +31,7 @@ class Response(TimeStamp):
     spam = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-_created_at']
 
     def __str__(self):
         return self.response[:25]
@@ -46,7 +46,7 @@ class Comment(TimeStamp):
     spam = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['_created_at']
 
     def __str__(self):
         return self.comment[:25]

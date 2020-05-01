@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { login } from "./../../actions/auth";
-import { raiseError } from "./../../actions/errors";
+import { raiseError, resetError } from "./../../actions/errors";
 import { connect } from "react-redux";
 import queryString from "querystring";
 import _ from "lodash";
@@ -18,6 +18,10 @@ class Login extends Component {
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
+  componentWillUnmount() {
+    this.props.resetError();
+  }
 
   render() {
     const next = _.get(
@@ -117,4 +121,6 @@ const mapStateToProps = (state) => ({
   error: state.errors,
 });
 
-export default connect(mapStateToProps, { login, raiseError })(Login);
+export default connect(mapStateToProps, { login, raiseError, resetError })(
+  Login
+);

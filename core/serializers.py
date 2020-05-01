@@ -19,7 +19,13 @@ class PostSerializer(serializers.ModelSerializer):
                   'upvote_count', 'downvote_count', 'spam', 'response_count',
                   'is_upvoted', 'is_downvoted', 'is_seen', 'created_at']
         extra_kwargs = {'spam': {'read_only': True},
-                        'created_by': {'required': False, 'read_only': True}}
+                        'created_by': {'required': False, 'read_only': True},
+                        'title': {'error_messages': {
+                            'required': 'Must include a proper title.',
+                            'blank': 'Must include a proper title'}},
+                        'details': {'error_messages': {
+                            'required': 'Must include a proper description.',
+                            'blank': 'Must include a proper description'}}}
 
     def created_by_(self, obj):
         return obj.created_by.username

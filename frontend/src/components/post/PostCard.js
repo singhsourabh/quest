@@ -34,7 +34,7 @@ class PostCard extends Component {
               {_.truncate(details, { omission: " [...]", length: 150 })}
             </p>
             <p className={`post-by grey-text darken-4 ${seenClass}`}>
-              Posted by <a>{created_by}</a> 3hrs ago
+              Posted by <a>{created_by}</a> {created_at}
             </p>
           </div>
           <div className="card-action">

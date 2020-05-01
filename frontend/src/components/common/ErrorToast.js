@@ -9,9 +9,7 @@ class ErrorToast extends Component {
       M.toast({ html: error.error });
     }
   }
-  // componentWillUnmount(){
 
-  // }
   render() {
     return <React.Fragment />;
   }

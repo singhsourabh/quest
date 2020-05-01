@@ -1,6 +1,6 @@
-import { GET_POSTS } from "../actions/types";
+import { GET_POSTS, ADD_POST, RESET_NEW_FLAG } from "../actions/types";
 
-const initialState = { posts: [] };
+const initialState = { posts: [], newAdded: false };
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -9,6 +9,10 @@ export default function (state = initialState, action) {
         ...state,
         posts: action.payload,
       };
+    case ADD_POST:
+      return { ...state, newAdded: true };
+    case RESET_NEW_FLAG:
+      return { ...state, newAdded: false };
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import { GET_ERROR } from "./../actions/types";
+import { GET_ERROR, RESET_ERROR } from "./../actions/types";
 import _ from "lodash";
 
 const initialState = {
@@ -15,6 +15,8 @@ export default function (state = initialState, action) {
         scope: errMsg ? "global" : "local",
         ..._.omit(action.payload, ["detail", "scope"]),
       };
+    case RESET_ERROR:
+      return initialState;
     default:
       return state;
   }
