@@ -4,13 +4,20 @@ import { connect } from "react-redux";
 import { logout } from "./../../actions/auth";
 
 class Navbar extends Component {
-  onClick = () => {
+  onClickLogout = () => {
     this.props.logout();
   };
   render() {
     const { user, isAuthenticated } = this.props;
+
     const authLinks = (
-      <ul className="right hide-on-med-and-down auth-links">
+      <React.Fragment>
+        <li>
+          <Link to="/addpost">
+            <i className="material-icons left">add_circle</i>
+            Add Post
+          </Link>
+        </li>
         <li>
           <a className="disabled-link">
             <i className="material-icons left">account_circle</i>
@@ -18,24 +25,23 @@ class Navbar extends Component {
           </a>
         </li>
         <li>
-          <Link to="#" onClick={this.onClick}>
+          <Link to="#" onClick={this.onClickLogout}>
             Logout
           </Link>
         </li>
-      </ul>
+      </React.Fragment>
     );
     const guestLinks = (
-      <ul className="right hide-on-med-and-down auth-links">
+      <React.Fragment>
         <li>
-          <Link to="/login" className="white-text">
-            Login
-          </Link>
+          <Link to="/login">Login</Link>
         </li>
         <li>
           <Link to="/register">Register</Link>
         </li>
-      </ul>
+      </React.Fragment>
     );
+
     return (
       <React.Fragment>
         <nav className="teal lighten-2">
@@ -51,18 +57,15 @@ class Navbar extends Component {
               >
                 <span className="material-icons">more_vert</span>
               </a>
-              {isAuthenticated ? authLinks : guestLinks}
+              <ul className="right hide-on-med-and-down auth-links">
+                {isAuthenticated ? authLinks : guestLinks}
+              </ul>
             </div>
           </div>
         </nav>
 
         <ul className="sidenav" id="mobile-side">
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
+          {isAuthenticated ? authLinks : guestLinks}
         </ul>
       </React.Fragment>
     );

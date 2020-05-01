@@ -28,16 +28,21 @@ export const login = (login_id, password) => (dispatch, getState) => {
 };
 
 export const loadUser = () => (dispatch, getState) => {
+  dispatch({ type: USER_LOADING });
   const token = localStorage.getItem("token");
-  const config = { headers: { Authorization: `Bearer ${token}` } };
-  axios
-    .get("/api/user", config)
-    .then((res) => {
-      dispatch({ type: USER_LOADED, payload: res.data });
-    })
-    .catch((err) => {
-      dispatch({ type: AUTH_ERROR });
-    });
+  if (!token) {
+    dispatch({ type: AUTH_ERROR });
+  } else {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    axios
+      .get("/api/user", config)
+      .then((res) => {
+        dispatch({ type: USER_LOADED, payload: res.data });
+      })
+      .catch((err) => {
+        dispatch({ type: AUTH_ERROR });
+      });
+  }
 };
 
 export const logout = () => (dispatch, getState) => {

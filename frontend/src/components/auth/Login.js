@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { login } from "./../../actions/auth";
+import { raiseError } from "./../../actions/errors";
 import { connect } from "react-redux";
+import queryString from "querystring";
+import _ from "lodash";
 
 class Login extends Component {
   state = {
@@ -17,12 +20,17 @@ class Login extends Component {
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   render() {
+    const next = _.get(
+      queryString.decode(this.props.location.search),
+      "?next",
+      "/"
+    );
     if (this.props.isAuthenticated) {
-      return <Redirect to="/" />;
+      return <Redirect to={next} />;
     }
     return (
       <div className="container">
-        <div className="row">
+        <div className="row auth-box">
           <form
             className="col s12 m8 l6 offset-m2 offset-l3"
             onSubmit={this.onSubmit}
@@ -109,4 +117,4 @@ const mapStateToProps = (state) => ({
   error: state.errors,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, raiseError })(Login);

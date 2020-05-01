@@ -11,21 +11,42 @@ from rest_framework.status import (
 )
 from .serializers import (PostSerializer,
                           ResponseSerializer,  CommentSerializer)
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Exists, OuterRef
 from .models import Post, Response, Comment, Activity
+
+seen_count = Count('activity', filter=Q(activity__activity_type='S'))
+upvote_count = Count('activity', filter=Q(activity__activity_type='U'))
+downvote_count = Count('activity', filter=Q(activity__activity_type='D'))
+response_count = Count('responses')
+
+
+def is_up_down_seen(user, activity_type):
+    queryexp = Exists(Activity.objects.filter(
+        user=user, object_id=OuterRef('id'), activity_type=activity_type))
+    return queryexp
 
 
 class PostList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
-    queryset = Post.objects.annotate(
-        seen=Count('activity', filter=Q(activity__activity_type='S')),
-        upvote=Count('activity', filter=Q(activity__activity_type='U')),
-        downvote=Count('activity', filter=Q(activity__activity_type='D')),
-        response_count=Count('responses'))
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
     ordering_fields = ['seen', 'response_count']
     search_fields = ['title', 'details']
+
+    def get_queryset(self):
+        queryset = Post.objects.annotate(
+            seen_count=seen_count,
+            upvote_count=upvote_count,
+            downvote_count=downvote_count,
+            response_count=response_count)
+
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate(
+                is_upvoted=is_up_down_seen(self.request.user, 'U'),
+                is_downvoted=is_up_down_seen(self.request.user, 'D'),
+                is_seen=is_up_down_seen(self.request.user, 'S'))
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -37,8 +58,14 @@ class ResponseList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Response.objects.filter(post_id=self.kwargs.get('post_id')).annotate(
-            upvote=Count('activity', filter=Q(activity__activity_type='U')),
-            downvote=Count('activity', filter=Q(activity__activity_type='D')))
+            upvote=upvote_count,
+            downvote=downvote_count)
+
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate(
+                is_upvoted=is_up_down_seen(self.request.user, 'U'),
+                is_downvoted=is_up_down_seen(self.request.user, 'D'))
+        print(queryset)
         return queryset
 
     def perform_create(self, serializer):
@@ -51,8 +78,14 @@ class CommentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Comment.objects.filter(response_id=self.kwargs.get('response_id')).annotate(
-            upvote=Count('activity', filter=Q(activity__activity_type='U')),
-            downvote=Count('activity', filter=Q(activity__activity_type='D')))
+            upvote=upvote_count,
+            downvote=downvote_count)
+
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate(
+                is_upvoted=is_up_down_seen(self.request.user, 'U'),
+                is_downvoted=is_up_down_seen(self.request.user, 'D'))
+
         return queryset
 
     def perform_create(self, serializer):
@@ -62,10 +95,19 @@ class CommentList(generics.ListCreateAPIView):
 class PostDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [(ReadOnly) | (IsOwner)]
     serializer_class = PostSerializer
-    queryset = Post.objects.annotate(
-        seen=Count('activity', filter=Q(activity__activity_type='S')),
-        upvote=Count('activity', filter=Q(activity__activity_type='U')),
-        downvote=Count('activity', filter=Q(activity__activity_type='D')))
+
+    def get_queryset(self):
+        queryset = Post.objects.annotate(
+            seen=seen_count,
+            upvote=upvote_count,
+            downvote=downvote_count)
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate(
+                is_upvoted=is_up_down_seen(self.request.user, 'U'),
+                is_downvoted=is_up_down_seen(self.request.user, 'D'),
+                is_seen=is_up_down_seen(self.request.user, 'S'))
+
+        return queryset
 
 
 class ResponseDetails(generics.RetrieveUpdateDestroyAPIView):
@@ -74,8 +116,14 @@ class ResponseDetails(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Response.objects.filter(post_id=self.kwargs.get('post_id')).annotate(
-            upvote=Count('activity', filter=Q(activity__activity_type='U')),
-            downvote=Count('activity', filter=Q(activity__activity_type='D')))
+            upvote=upvote_count,
+            downvote=downvote_count)
+
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate(
+                is_upvoted=is_up_down_seen(self.request.user, 'U'),
+                is_downvoted=is_up_down_seen(self.request.user, 'D'))
+
         return queryset
 
 
@@ -85,6 +133,10 @@ class CommentDetails(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Comment.objects.filter(response_id=self.kwargs.get('response_id')).annotate(
-            upvote=Count('activity', filter=Q(activity__activity_type='U')),
-            downvote=Count('activity', filter=Q(activity__activity_type='D')))
+            upvote=upvote_count,
+            downvote=downvote_count)
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate(
+                is_upvoted=is_up_down_seen(self.request.user, 'U'),
+                is_downvoted=is_up_down_seen(self.request.user, 'D'))
         return queryset

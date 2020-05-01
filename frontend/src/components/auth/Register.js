@@ -4,7 +4,7 @@ class Register extends Component {
   render() {
     return (
       <div className="container">
-        <div className="row">
+        <div className="row auth-box">
           <form className="col s12 m8 l6 offset-m2 offset-l3">
             <div className="card-panel auth-card">
               <div className="center-align teal-text">

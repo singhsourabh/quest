@@ -5,6 +5,7 @@ import Navbar from "./components/common/Navbar";
 import Dashboard from "./components/DashBoard";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import AddPost from "./components/post/AddPost";
 import ErrorToast from "./components/common/ErrorToast";
 
 import { Provider } from "react-redux";
@@ -25,9 +26,10 @@ class App extends Component {
           <ErrorToast />
           <BrowserRouter>
             <Navbar />
-            <PrivateRoute path="/" exact component={Dashboard} />
+            <Route path="/" exact component={Dashboard} />
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
+            <PrivateRoute path="/addpost" exact component={AddPost} />
           </BrowserRouter>
         </React.Fragment>
       </Provider>

@@ -13,7 +13,7 @@ export default function (state = initialState, action) {
         ...state,
         error: errMsg,
         scope: errMsg ? "global" : "local",
-        ..._.omit(action.payload, ["error", "detail"]),
+        ..._.omit(action.payload, ["detail", "scope"]),
       };
     default:
       return state;
