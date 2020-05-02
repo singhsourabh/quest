@@ -2,8 +2,22 @@ import React, { Component } from "react";
 import { Route, Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "./../../actions/auth";
+import { getPosts } from "./../../actions/posts";
 
 class Navbar extends Component {
+  state = {
+    search: "",
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.props.getPosts(this.props.isAuthenticated, {
+      search: this.state.search,
+    });
+  };
+
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
   onClickLogout = () => {
     this.props.logout();
   };
@@ -45,22 +59,38 @@ class Navbar extends Component {
     return (
       <React.Fragment>
         <nav className="teal lighten-2">
-          <div className="nav-wrapper">
-            <div className="container">
-              <a href="#" className="brand-logo">
-                <b>QUEST</b>
-              </a>
-              <a
-                href="#"
-                data-target="mobile-side"
-                className="sidenav-trigger right valign-wrapper"
-              >
-                <span className="material-icons">more_vert</span>
-              </a>
-              <ul className="right hide-on-med-and-down auth-links">
-                {isAuthenticated ? authLinks : guestLinks}
-              </ul>
-            </div>
+          <div className="nav-wrapper row">
+            <Link to="/" className="brand-logo">
+              <b>QUEST</b>
+            </Link>
+            <a
+              href="#"
+              data-target="mobile-side"
+              className="sidenav-trigger right valign-wrapper"
+            >
+              <span className="material-icons">more_vert</span>
+            </a>
+            <ul className="right hide-on-med-and-down auth-links">
+              {isAuthenticated ? authLinks : guestLinks}
+            </ul>
+            <form
+              className="hide-on-med-and-down col l5 offset-l2"
+              onSubmit={this.onSubmit}
+            >
+              <div className="input-field teal lighten-3">
+                <input
+                  className="white-text"
+                  id="search"
+                  type="search"
+                  name="search"
+                  onChange={this.onChange}
+                />
+                <label className="label-icon" htmlFor="search">
+                  <i className="material-icons">search</i>
+                </label>
+                <i className="material-icons">close</i>
+              </div>
+            </form>
           </div>
         </nav>
 
@@ -77,4 +107,4 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout, getPosts })(Navbar);

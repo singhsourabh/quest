@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
+import { Link, Redirect } from "react-router-dom";
 
 class PostCard extends Component {
+  state = {
+    navigate: false,
+  };
+
   render() {
     const {
       id,
@@ -21,10 +26,22 @@ class PostCard extends Component {
     const downClass = is_downvoted == true ? "down-active" : "down";
     const seenClass = is_seen == true ? "seen" : "new";
 
+    const { navigate } = this.state;
+
+    if (navigate) {
+      return <Redirect to={`/response/${id}`} push={true} />;
+    }
+
     return (
       <div className="card horizontal">
         <div className="card-stacked">
-          <div className="card-content">
+          <div
+            className="card-content"
+            onClick={() => {
+              this.setState({ navigate: true });
+            }}
+            style={{ cursor: "pointer" }}
+          >
             <h5
               className={`header post-title blue-grey-text darken-4 ${seenClass}`}
             >

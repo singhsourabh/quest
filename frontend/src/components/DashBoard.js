@@ -18,7 +18,7 @@ class DashBoard extends Component {
     return (
       <div className="container">
         <h5 className="header blue-grey-text ">
-          <b>Popular Posts:</b>
+          <b>Posts:</b>
         </h5>
         {this.props.posts.map((post) => (
           <PostCard key={post.id} data={post} />

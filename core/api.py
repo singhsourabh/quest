@@ -11,13 +11,16 @@ from rest_framework.status import (
 )
 from .serializers import (PostSerializer,
                           ResponseSerializer,  CommentSerializer)
-from django.db.models import Q, Count, Exists, OuterRef
+from django.db.models import Q, Count, Exists, OuterRef, Subquery
 from .models import Post, Response, Comment, Activity
 
-seen_count = Count('activity', filter=Q(activity__activity_type='S'))
-upvote_count = Count('activity', filter=Q(activity__activity_type='U'))
-downvote_count = Count('activity', filter=Q(activity__activity_type='D'))
-response_count = Count('responses')
+seen_count = Count('activity', filter=Q(
+    activity__activity_type='S',), distinct=True)
+upvote_count = Count('activity', filter=Q(
+    activity__activity_type='U'), distinct=True)
+downvote_count = Count('activity', filter=Q(
+    activity__activity_type='D'), distinct=True)
+response_count = Count('responses', distinct=True)
 
 
 def is_up_down_seen(user, activity_type):
@@ -45,8 +48,7 @@ class PostList(generics.ListCreateAPIView):
                 is_upvoted=is_up_down_seen(self.request.user, 'U'),
                 is_downvoted=is_up_down_seen(self.request.user, 'D'),
                 is_seen=is_up_down_seen(self.request.user, 'S'))
-
-        return queryset
+        return queryset.distinct()
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -58,14 +60,13 @@ class ResponseList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Response.objects.filter(post_id=self.kwargs.get('post_id')).annotate(
-            upvote=upvote_count,
-            downvote=downvote_count)
+            upvote_count=upvote_count,
+            downvote_count=downvote_count)
 
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(
                 is_upvoted=is_up_down_seen(self.request.user, 'U'),
                 is_downvoted=is_up_down_seen(self.request.user, 'D'))
-        print(queryset)
         return queryset
 
     def perform_create(self, serializer):
@@ -78,8 +79,8 @@ class CommentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Comment.objects.filter(response_id=self.kwargs.get('response_id')).annotate(
-            upvote=upvote_count,
-            downvote=downvote_count)
+            upvote_count=upvote_count,
+            downvote_count=downvote_count)
 
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(
@@ -98,15 +99,15 @@ class PostDetails(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Post.objects.annotate(
-            seen=seen_count,
-            upvote=upvote_count,
-            downvote=downvote_count)
+            seen_count=seen_count,
+            upvote_count=upvote_count,
+            downvote_count=downvote_count,
+            response_count=response_count)
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(
                 is_upvoted=is_up_down_seen(self.request.user, 'U'),
                 is_downvoted=is_up_down_seen(self.request.user, 'D'),
                 is_seen=is_up_down_seen(self.request.user, 'S'))
-
         return queryset
 
 
@@ -116,8 +117,8 @@ class ResponseDetails(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Response.objects.filter(post_id=self.kwargs.get('post_id')).annotate(
-            upvote=upvote_count,
-            downvote=downvote_count)
+            upvote_count=upvote_count,
+            downvote_count=downvote_count)
 
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(
@@ -133,8 +134,8 @@ class CommentDetails(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Comment.objects.filter(response_id=self.kwargs.get('response_id')).annotate(
-            upvote=upvote_count,
-            downvote=downvote_count)
+            upvote_count=upvote_count,
+            downvote_count=downvote_count)
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(
                 is_upvoted=is_up_down_seen(self.request.user, 'U'),

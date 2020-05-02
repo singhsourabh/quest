@@ -10,14 +10,14 @@
   margin-top: 1em;
 }
 
-/* @media (min-width: 992px) {
+@media (min-width: 992px) {
   .brand-logo {
     margin-left: 1em;
   }
   .auth-links {
     margin-right: 1em;
   }
-} */
+}
 
 .post-title {
   margin-top: 0 !important;
@@ -72,4 +72,8 @@
 
 .down:hover {
   color: #e65100;
+}
+
+#search:focus {
+  color: black !important;
 }
