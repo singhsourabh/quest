@@ -10,7 +10,7 @@ export default function (state = initialState, action) {
     case GET_ERROR:
       const errMsg = action.payload.detail;
       return {
-        ...state,
+        // ...state,
         error: errMsg,
         scope: errMsg ? "global" : "local",
         ..._.omit(action.payload, ["detail", "scope"]),

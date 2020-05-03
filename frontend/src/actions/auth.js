@@ -10,7 +10,7 @@ import {
   LOGOUT_SUCCESS,
 } from "./types";
 
-export const login = (login_id, password) => (dispatch, getState) => {
+export const login = (login_id, password) => (dispatch) => {
   const config = { headers: { "Content-Type": "application/json" } };
   const body = JSON.stringify({ login_id, password });
   axios
@@ -27,7 +27,7 @@ export const login = (login_id, password) => (dispatch, getState) => {
     });
 };
 
-export const loadUser = () => (dispatch, getState) => {
+export const loadUser = () => (dispatch) => {
   dispatch({ type: USER_LOADING });
   const token = localStorage.getItem("token");
   if (!token) {
@@ -45,7 +45,30 @@ export const loadUser = () => (dispatch, getState) => {
   }
 };
 
-export const logout = () => (dispatch, getState) => {
+export const logout = () => (dispatch) => {
   localStorage.removeItem("token");
   dispatch({ type: LOGOUT_SUCCESS });
+};
+
+export const registerUser = (username, email, password, password1) => (
+  dispatch
+) => {
+  const config = { headers: { "Content-Type": "application/json" } };
+  const body = JSON.stringify({ username, email, password, password1 });
+  axios
+    .post("/api/register", body, config)
+    .then((res) => {
+      localStorage.setItem("token", res.data.token);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: { ...res.data, user: res.data.username },
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: LOGIN_FAIL });
+      dispatch({
+        type: GET_ERROR,
+        payload: { ...err.response.data },
+      });
+    });
 };

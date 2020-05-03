@@ -43,7 +43,6 @@ class Login extends Component {
               <div className="center-align teal-text">
                 <h3 className="auth-heading">Login</h3>
               </div>
-
               {this.props.error && this.props.error.login_id ? (
                 <div className="input-field">
                   <input
