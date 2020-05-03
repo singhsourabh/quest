@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { getPostDetail, resetPostDetails } from "./../../actions/posts";
 import ShowMoreText from "./../common/ShowMoreText";
 import NewResponse from "./NewResponse";
+import qs from "qs";
+import Pagination from "./../common/Pagination";
 
 class PostResponse extends Component {
   state = {
@@ -14,13 +16,26 @@ class PostResponse extends Component {
   };
 
   componentDidMount() {
+    const query = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
     const id = this.props.match.params.id;
     this.setState({ id: id });
-    this.props.getPostDetail(this.props.isAuthenticated, id);
+    this.props.getPostDetail(this.props.isAuthenticated, id, query);
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.isAuthenticated != this.props.isAuthenticated) {
-      this.props.getPostDetail(this.props.isAuthenticated, this.state.id);
+    const query = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
+    if (
+      prevProps.isAuthenticated != this.props.isAuthenticated ||
+      prevProps.pagination.current != (query.page || 1)
+    ) {
+      this.props.getPostDetail(
+        this.props.isAuthenticated,
+        this.state.id,
+        query
+      );
     }
     if (prevProps.post != this.props.post && this.props.post != null) {
       this.setState({ isPostLoading: false });
@@ -113,6 +128,12 @@ class PostResponse extends Component {
             this.props.responses.map((response) => (
               <ResponseCard key={response.id} data={response} />
             ))}
+
+          {id ? (
+            <Pagination
+              data={{ ...this.props.pagination, source: `/response/${id}/` }}
+            />
+          ) : null}
         </div>
       </Fragment>
     );
@@ -122,6 +143,7 @@ class PostResponse extends Component {
 const mapStateToProps = (state) => ({
   post: state.posts.postDetails.post,
   responses: state.posts.postDetails.responses,
+  pagination: state.posts.pagination,
   isAuthenticated: state.auth.isAuthenticated,
 });
 

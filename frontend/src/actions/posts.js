@@ -22,9 +22,26 @@ export const getPosts = (isAuthenticated = false, query = {}) => (dispatch) => {
   axios
     .get("/api/posts", config)
     .then((res) => {
-      dispatch({ type: GET_POSTS, payload: res.data.data });
+      const { count, next, current, previous } = res.data;
+      dispatch({
+        type: GET_POSTS,
+        payload: {
+          posts: res.data.data,
+          pagination: {
+            count,
+            current,
+            previous: previous != null ? current - 1 : null,
+            next: next != null ? current + 1 : null,
+          },
+        },
+      });
     })
-    .catch((err) => console.log(err.response.data));
+    .catch((err) => {
+      dispatch({
+        type: GET_ERROR,
+        payload: { ...err.response.data },
+      });
+    });
 };
 
 export const addPost = (title, details) => (dispatch) => {
@@ -37,7 +54,6 @@ export const addPost = (title, details) => (dispatch) => {
       dispatch({ type: ADD_POST });
     })
     .catch((err) => {
-      console.log(err.response.data);
       dispatch({
         type: GET_ERROR,
         payload: { ...err.response.data },
@@ -49,20 +65,35 @@ export const reset_new_flag = () => (dispatch) => {
   dispatch({ type: RESET_NEW_FLAG });
 };
 
-export const getPostDetail = (isAuthenticated = false, id) => async (
-  dispatch
-) => {
+export const getPostDetail = (
+  isAuthenticated = false,
+  id,
+  query = {}
+) => async (dispatch) => {
   let config = {},
     response;
   if (isAuthenticated == true) {
     const token = localStorage.getItem("token");
     config = { headers: { Authorization: `Bearer ${token}` } };
   }
+  config["params"] = query;
   try {
     response = await axios.get(`/api/post/${id}`, config);
     dispatch({ type: GET_POST_DETAIL, payload: response.data });
-    response = await axios.get(`/api/responses/${id}`, config);
-    dispatch({ type: GET_RESPONSES, payload: response.data.data });
+    response = await axios.get(`/api/responses/${id}`, config, query);
+    const { count, next, current, previous } = response.data;
+    dispatch({
+      type: GET_RESPONSES,
+      payload: {
+        data: response.data.data,
+        pagination: {
+          count,
+          current,
+          previous: previous != null ? current - 1 : null,
+          next: next != null ? current + 1 : null,
+        },
+      },
+    });
   } catch (err) {
     dispatch({ type: GET_ERROR, payload: { ...err.response.data } });
   }

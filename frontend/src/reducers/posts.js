@@ -13,6 +13,7 @@ const initialState = {
   posts: [],
   newAdded: false,
   postDetails: { post: null, responses: null },
+  pagination: { current: 1 },
 };
 
 export default function (state = initialState, action) {
@@ -20,7 +21,8 @@ export default function (state = initialState, action) {
     case GET_POSTS:
       return {
         ...state,
-        posts: action.payload,
+        posts: action.payload.posts,
+        pagination: { ...action.payload.pagination },
       };
     case ADD_POST:
       return { ...state, newAdded: true };
@@ -32,7 +34,8 @@ export default function (state = initialState, action) {
     case GET_RESPONSES:
       return {
         ...state,
-        postDetails: { ...state.postDetails, responses: action.payload },
+        postDetails: { ...state.postDetails, responses: action.payload.data },
+        pagination: { ...action.payload.pagination },
       };
     case ADD_RESPONSE:
       return {

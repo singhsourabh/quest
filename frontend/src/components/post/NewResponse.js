@@ -48,21 +48,18 @@ class NewResponse extends Component {
                 ) : (
                   <Fragment>
                     {this.props.error && this.props.error.response ? (
-                      (console.log(this.props.error),
-                      (
-                        <Fragment>
-                          <textarea
-                            id="comment-area"
-                            className="materialize-textarea m-0 validate invalid"
-                            onChange={this.onChange}
-                            name="response"
-                          ></textarea>
-                          <span
-                            className="helper-text"
-                            data-error={this.props.error.response}
-                          ></span>
-                        </Fragment>
-                      ))
+                      <Fragment>
+                        <textarea
+                          id="comment-area"
+                          className="materialize-textarea m-0 validate invalid"
+                          onChange={this.onChange}
+                          name="response"
+                        ></textarea>
+                        <span
+                          className="helper-text"
+                          data-error={this.props.error.response}
+                        ></span>
+                      </Fragment>
                     ) : (
                       <Fragment>
                         <textarea

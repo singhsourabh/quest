@@ -2,15 +2,26 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getPosts } from "./../actions/posts";
 import PostCard from "./post/PostCard";
+import Pagination from "./common/Pagination";
+import qs from "qs";
 
 class DashBoard extends Component {
   componentDidMount() {
-    this.props.getPosts(this.props.isAuthenticated);
+    const query = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
+    this.props.getPosts(this.props.isAuthenticated, query);
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isAuthenticated != this.props.isAuthenticated) {
-      this.props.getPosts(this.props.isAuthenticated);
+    const query = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
+    if (
+      prevProps.isAuthenticated != this.props.isAuthenticated ||
+      prevProps.pagination.current != (query.page || 1)
+    ) {
+      this.props.getPosts(this.props.isAuthenticated, query);
     }
   }
 
@@ -23,35 +34,7 @@ class DashBoard extends Component {
         {this.props.posts.map((post) => (
           <PostCard key={post.id} data={post} />
         ))}
-        <ul class="pagination">
-          <li class="disabled">
-            <a href="#!">
-              <i class="material-icons">chevron_left</i>
-            </a>
-          </li>
-          <li class="active">
-            <a href="#!" className="teal lighten-1">
-              1
-            </a>
-          </li>
-          <li class="waves-effect">
-            <a href="#!">2</a>
-          </li>
-          <li class="waves-effect">
-            <a href="#!">3</a>
-          </li>
-          <li class="waves-effect">
-            <a href="#!">4</a>
-          </li>
-          <li class="waves-effect">
-            <a href="#!">5</a>
-          </li>
-          <li class="waves-effect">
-            <a href="#!">
-              <i class="material-icons">chevron_right</i>
-            </a>
-          </li>
-        </ul>
+        <Pagination data={{ ...this.props.pagination, source: "/" }} />
       </div>
     );
   }
@@ -59,6 +42,7 @@ class DashBoard extends Component {
 
 const mapStateToProps = (state) => ({
   posts: state.posts.posts,
+  pagination: state.posts.pagination,
   isAuthenticated: state.auth.isAuthenticated,
 });
 
