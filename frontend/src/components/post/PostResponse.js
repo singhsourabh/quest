@@ -4,6 +4,7 @@ import ResponseCard from "./ResponseCard";
 import { connect } from "react-redux";
 import { getPostDetail, resetPostDetails } from "./../../actions/posts";
 import ShowMoreText from "./../common/ShowMoreText";
+import NewResponse from "./NewResponse";
 
 class PostResponse extends Component {
   state = {
@@ -59,7 +60,9 @@ class PostResponse extends Component {
         <div className="container">
           <div className="card horizontal">
             <div className="card-stacked">
-              {this.state.isLoading ? <Loader /> : null}
+              {this.state.isPostLoading || this.state.isResponseLoading ? (
+                <Loader />
+              ) : null}
 
               <div className="card-content">
                 <h5 className={`header post-title blue-grey-text darken-4`}>
@@ -96,7 +99,15 @@ class PostResponse extends Component {
               </div>
             </div>
           </div>
-          <div>Responses: {response_count}</div>
+          {/* <hr style={{ border: 0, borderTop: "1px solid #b0bec5" }} /> */}
+          <NewResponse postId={this.state.id} />
+          <div className="blue-grey-text darken-2">
+            {response_count == 0
+              ? "No one responded yet!"
+              : response_count == 1
+              ? `${response_count} response`
+              : `${response_count} responses`}
+          </div>
           <hr style={{ border: 0, borderTop: "1px solid #b0bec5" }} />
           {!this.state.isResponseLoading &&
             this.props.responses.map((response) => (

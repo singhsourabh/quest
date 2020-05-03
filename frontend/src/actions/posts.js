@@ -5,8 +5,10 @@ import {
   GET_POST_DETAIL,
   GET_RESPONSES,
   GET_ERROR,
+  ADD_RESPONSE,
   RESET_POST_DETAILS,
   RESET_NEW_FLAG,
+  UP_DOWN_TOGGLE_POST,
 } from "./types";
 
 export const getPosts = (isAuthenticated = false, query = {}) => (dispatch) => {
@@ -68,4 +70,28 @@ export const getPostDetail = (isAuthenticated = false, id) => async (
 
 export const resetPostDetails = () => (dispatch) => {
   dispatch({ type: RESET_POST_DETAILS });
+};
+
+export const addResponse = (id, response) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const data = { response: response };
+  try {
+    response = await axios.post(`/api/responses/${id}`, data, config);
+    dispatch({ type: ADD_RESPONSE, payload: response.data });
+  } catch (err) {
+    dispatch({ type: GET_ERROR, payload: { ...err.response.data } });
+  }
+};
+
+export const upDownToggle = (id, actionType, source) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const data = { id, type: actionType, content: source };
+  try {
+    const response = await axios.patch("/api/updown", data, config);
+    dispatch({ type: UP_DOWN_TOGGLE_POST, payload: { id, ...response.data } });
+  } catch (err) {
+    dispatch({ type: GET_ERROR, payload: { ...err.response.data } });
+  }
 };

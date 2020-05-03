@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/comments/<uuid:response_id>', core_api.CommentList.as_view()),
     path('api/comment/<uuid:response_id>/<uuid:pk>',
          core_api.CommentDetails.as_view()),
+    path('api/updown', core_api.UpDownToggle.as_view()),
     path('', TemplateView.as_view(template_name="frontend/index.html")),
     re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name="frontend/index.html")),
 ]

@@ -26,6 +26,7 @@ class AddPost extends Component {
   }
   componentWillUnmount() {
     this.props.reset_new_flag();
+    this.props.resetError();
   }
   render() {
     if (this.props.newAdded) {

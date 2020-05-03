@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Link, Redirect } from "react-router-dom";
+import { upDownToggle } from "./../../actions/posts";
+import { connect } from "react-redux";
 
 class PostCard extends Component {
   state = {
     navigate: false,
+  };
+
+  onUpDownToggle = (id, action) => {
+    if (this.props.user.isAuthenticated) {
+      this.props.upDownToggle(id, action, "Post");
+    }
   };
 
   render() {
@@ -57,13 +65,21 @@ class PostCard extends Component {
           <div className="card-action">
             <div className="action-pannel">
               <div className="action-btn valign-wrapper">
-                <i className={`material-icons action-icon ${upClass}`}>
+                <i
+                  className={`material-icons action-icon ${upClass}`}
+                  onClick={this.onUpDownToggle.bind(this, id, "U")}
+                  style={{ cursor: "pointer" }}
+                >
                   thumb_up
                 </i>
                 <span>{upvote_count}</span>
               </div>
               <div className="action-btn valign-wrapper">
-                <i className={`material-icons action-icon ${downClass}`}>
+                <i
+                  className={`material-icons action-icon ${downClass}`}
+                  onClick={this.onUpDownToggle.bind(this, id, "D")}
+                  style={{ cursor: "pointer" }}
+                >
                   thumb_down
                 </i>
                 <span>{downvote_count}</span>
@@ -80,4 +96,8 @@ class PostCard extends Component {
   }
 }
 
-export default PostCard;
+const mapStateToProps = (state) => ({
+  user: state.auth,
+});
+
+export default connect(mapStateToProps, { upDownToggle })(PostCard);

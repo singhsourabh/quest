@@ -52,6 +52,11 @@
   margin-left: 0;
 }
 
+.action-btn:last-child {
+  margin-left: auto;
+  margin-right: 0;
+}
+
 .action-icon {
   margin-right: 0.3em;
   color: #78909c;
@@ -77,3 +82,31 @@
 #search:focus {
   color: black !important;
 }
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.comment-box {
+  padding-top: 1.5em !important;
+  padding-bottom: 1em !important;
+  margin-bottom: 1em !important;
+  border: 1px solid #b0bec5;
+}
+
+/* .comment-box {
+  border: 0.5px solid #00bfa5;
+} */
+
+#post-btn {
+  margin: 0;
+  margin-right: 0.7em;
+}
+
+#comment-alert {
+  margin-left: 0.7em !important;
+}
+
+/* .more-details {
+  float: right !important;
+} */

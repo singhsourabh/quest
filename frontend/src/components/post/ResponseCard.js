@@ -41,6 +41,9 @@ class ResponseCard extends Component {
                   </i>
                   <span>{downvote_count}</span>
                 </div>
+                <div className="hide-on-med-and-up action-btn">
+                  <i className="material-icons">more_vert</i>
+                </div>
               </div>
             </div>
           </div>

@@ -4,6 +4,8 @@ export const GET_POST_DETAIL = "GET_POST_DETAIL";
 export const GET_RESPONSES = "GET_RESPONSES";
 export const GET_COMMENTS = "GET_COMMENTS";
 export const RESET_POST_DETAILS = "RESET_POST_DETAILS";
+export const ADD_RESPONSE = "ADD_RESPONSE";
+export const UP_DOWN_TOGGLE_POST = "UP_DOWN_TOGGLE_POST";
 
 export const USER_LOADING = "USER_LOADING";
 export const USER_LOADED = "USER_LOADED";
