@@ -16,9 +16,9 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'created_by', 'details', 'seen_count',
-                  'upvote_count', 'downvote_count', 'spam', 'response_count',
+                  'upvote_count', 'downvote_count', 'is_toxic', 'response_count',
                   'is_upvoted', 'is_downvoted', 'is_seen', 'created_at']
-        extra_kwargs = {'spam': {'read_only': True},
+        extra_kwargs = {'is_toxic': {'read_only': True},
                         'created_by': {'required': False, 'read_only': True},
                         'title': {'error_messages': {
                             'required': 'Must include a proper title.',
@@ -42,8 +42,8 @@ class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Response
         fields = ['id', 'response', 'created_by', 'upvote_count',
-                  'downvote_count', 'spam', 'is_upvoted', 'is_downvoted', 'created_at']
-        extra_kwargs = {'spam': {'read_only': True},
+                  'downvote_count', 'is_toxic', 'is_upvoted', 'is_downvoted', 'created_at']
+        extra_kwargs = {'is_toxic': {'read_only': True},
                         'created_by': {'required': False, 'read_only': True},
                         'response': {'error_messages': {
                             'required': 'Response cannot be empty.',
@@ -64,8 +64,8 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'comment', 'created_by', 'upvote_count',
-                  'downvote_count', 'spam', 'is_upvoted', 'is_downvoted', 'created_at']
-        extra_kwargs = {'spam': {'read_only': True},
+                  'downvote_count', 'is_toxic', 'is_upvoted', 'is_downvoted', 'created_at']
+        extra_kwargs = {'is_toxic': {'read_only': True},
                         'created_by': {'required': False, 'read_only': True}}
 
     def created_by_(self, obj):

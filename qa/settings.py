@@ -163,3 +163,6 @@ SIMPLE_JWT = {
 #         }
 #     }
 # }
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'

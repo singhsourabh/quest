@@ -13,10 +13,15 @@ class Post(TimeStamp):
     details = models.TextField()
     created_by = models.ForeignKey('userauth.User', on_delete=models.CASCADE)
     activity = GenericRelation('Activity')
-    spam = models.BooleanField(default=False)
+    is_toxic = models.BooleanField(null=True)
+    _toxic_class = models.CharField(max_length=50, default="")
 
     class Meta:
         ordering = ['-_created_at']
+
+    @property
+    def toxic_class(self):
+        return (self.toxic) if self._toxic_class.split() else []
 
     def __str__(self):
         return self.title[:25]
@@ -28,10 +33,15 @@ class Response(TimeStamp):
     response = models.TextField(null=False)
     created_by = models.ForeignKey('userauth.User', on_delete=models.CASCADE)
     activity = GenericRelation('Activity')
-    spam = models.BooleanField(default=False)
+    is_toxic = models.BooleanField(null=True)
+    _toxic_class = models.CharField(max_length=50, default="")
 
     class Meta:
         ordering = ['-_created_at']
+
+    @property
+    def toxic_class(self):
+        return (self.toxic) if self._toxic_class.split() else []
 
     def __str__(self):
         return self.response[:25]
@@ -43,10 +53,15 @@ class Comment(TimeStamp):
     comment = models.CharField(max_length=100)
     created_by = models.ForeignKey('userauth.User', on_delete=models.CASCADE)
     activity = GenericRelation('Activity')
-    spam = models.BooleanField(default=False)
+    is_toxic = models.BooleanField(null=True)
+    _toxic_class = models.CharField(max_length=50, default="")
 
     class Meta:
         ordering = ['_created_at']
+
+    @property
+    def toxic_class(self):
+        return (self.toxic) if self._toxic_class.split() else []
 
     def __str__(self):
         return self.comment[:25]

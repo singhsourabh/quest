@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404
 from .serializers import (PostSerializer,
                           ResponseSerializer,  CommentSerializer)
 from .models import Post, Response, Comment, Activity
+from .tasks import check_toxicity
 
 seen_count = Count('activity', filter=Q(
     activity__activity_type='S',), distinct=True)
@@ -59,7 +60,8 @@ class PostList(generics.ListCreateAPIView):
         return queryset.distinct()
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        new_post = serializer.save(created_by=self.request.user)
+        check_toxicity.delay(new_post.id)
 
 
 class ResponseList(generics.ListCreateAPIView):
