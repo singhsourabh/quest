@@ -20,7 +20,10 @@ class ResponseCard extends Component {
         <div className="card horizontal">
           <div className="card-stacked">
             <div className="card-content">
-              <p className={`blue-grey-text darken-3 post-detail`}>
+              <p
+                className={`blue-grey-text darken-3 post-detail`}
+                style={{ whiteSpace: "pre-line", whiteSpace: "pre-wrap" }}
+              >
                 <ShowMoreText text={response} />
               </p>
               <p className={`post-by grey-text darken-4`}>

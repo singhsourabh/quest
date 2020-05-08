@@ -83,8 +83,11 @@ class PostResponse extends Component {
                 <h5 className={`header post-title blue-grey-text darken-4`}>
                   {title}
                 </h5>
-                <p className={`blue-grey-text darken-3 post-detail`}>
-                  <ShowMoreText text={details} />
+                <p
+                  className={`blue-grey-text darken-3 post-detail`}
+                  style={{ whiteSpace: "pre-line", whiteSpace: "pre-wrap" }}
+                >
+                  {details}
                 </p>
                 <p className={`post-by grey-text darken-4`}>
                   Posted by <a>{created_by}</a> {created_at}

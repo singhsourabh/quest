@@ -3,6 +3,7 @@ import _ from "lodash";
 import { Link, Redirect } from "react-router-dom";
 import { upDownToggle } from "./../../actions/posts";
 import { connect } from "react-redux";
+import ShowMoreText from "./../common/ShowMoreText";
 
 class PostCard extends Component {
   state = {
@@ -55,8 +56,11 @@ class PostCard extends Component {
             >
               {title}
             </h5>
-            <p className={`blue-grey-text darken-3 post-detail ${seenClass}`}>
-              {_.truncate(details, { omission: " [...]", length: 150 })}
+            <p
+              className={`blue-grey-text darken-3 post-detail ${seenClass}`}
+              style={{ whiteSpace: "pre-line", whiteSpace: "pre-wrap" }}
+            >
+              <ShowMoreText text={details} />
             </p>
             <p className={`post-by grey-text darken-4 ${seenClass}`}>
               Posted by <a>{created_by}</a> {created_at}
