@@ -29,6 +29,8 @@ class PostCard extends Component {
       is_upvoted,
       is_downvoted,
       is_seen,
+      is_toxic,
+      toxic_class,
     } = this.props.data;
 
     const upClass = is_upvoted == true ? "up-active" : "up";
@@ -51,6 +53,16 @@ class PostCard extends Component {
             }}
             style={{ cursor: "pointer" }}
           >
+            {is_toxic
+              ? toxic_class.map((label) => (
+                  <div
+                    className="chip red lighten-2 white-text"
+                    key={id + label}
+                  >
+                    {label}
+                  </div>
+                ))
+              : null}
             <h5
               className={`header post-title blue-grey-text darken-4 ${seenClass}`}
             >

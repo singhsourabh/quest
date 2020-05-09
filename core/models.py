@@ -21,7 +21,7 @@ class Post(TimeStamp):
 
     @property
     def toxic_class(self):
-        return (self.toxic) if self._toxic_class.split() else []
+        return self._toxic_class.split() if (self.is_toxic) else []
 
     def __str__(self):
         return self.title[:25]

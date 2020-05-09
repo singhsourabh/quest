@@ -17,8 +17,9 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'title', 'created_by', 'details', 'seen_count',
                   'upvote_count', 'downvote_count', 'is_toxic', 'response_count',
-                  'is_upvoted', 'is_downvoted', 'is_seen', 'created_at']
+                  'is_upvoted', 'is_downvoted', 'is_seen', 'created_at', 'toxic_class']
         extra_kwargs = {'is_toxic': {'read_only': True},
+                        'toxic_class': {'read_only': True},
                         'created_by': {'required': False, 'read_only': True},
                         'title': {'error_messages': {
                             'required': 'Must include a proper title.',
