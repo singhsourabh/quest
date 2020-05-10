@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     'userauth',
-#     'core',
+    'core',
     'frontend',
 ]
 
