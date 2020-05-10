@@ -1,2 +1,2 @@
 web: gunicorn qa.wsgi --log-file -
-worker: celery -A qa worker
+worker: celery -A qa worker --loglevel=info
