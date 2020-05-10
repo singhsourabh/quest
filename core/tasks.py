@@ -34,7 +34,7 @@ def check_toxicity(post_id):
     for prediction in result:
         for i, j in enumerate(prediction):
             if(j == 1):
-                toxic_class.add(labels[j])
+                toxic_class.add(labels[i])
     if len(toxic_class) > 0:
         post.is_toxic = True
         post._toxic_class = ' '.join(toxic_class)
