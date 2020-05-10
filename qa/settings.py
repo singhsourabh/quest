@@ -25,7 +25,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ['ENV'] == 'local':
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -159,10 +162,13 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30)
 }
 
-REDIS_DB_PATH = os.path.join(BASE_DIR, 'redis.db')
-rdb = Redis(REDIS_DB_PATH)
-REDIS_SOCKET_PATH = 'redis+socket://%s' % (rdb.socket_file, )
+if os.environ['ENV'] == 'heroku':
+    CELERY_BROKER_URL = os.environ['AMQP_URL']
+else:
+    REDIS_DB_PATH = os.path.join(BASE_DIR, 'redis.db')
+    rdb = Redis(REDIS_DB_PATH)
+    REDIS_SOCKET_PATH = 'redis+socket://%s' % (rdb.socket_file, )
 
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_BROKER_URL = REDIS_SOCKET_PATH
-CELERY_RESULT_BACKEND = REDIS_SOCKET_PATH
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_BROKER_URL = REDIS_SOCKET_PATH
+    CELERY_RESULT_BACKEND = REDIS_SOCKET_PATH
