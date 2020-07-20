@@ -26,7 +26,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "javascript-time-ago": "^2.0.7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "materialize-css": "^1.0.0-rc.2",
     "prop-types": "^15.7.2",
     "qs": "^6.9.3",
