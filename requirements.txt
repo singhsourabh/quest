@@ -13,7 +13,7 @@ contextlib2==0.6.0
 cymem==2.0.3
 distlib==0.3.0
 distro==1.4.0
-Django==2.2.12
+Django==2.2.20
 django-filter==2.2.0
 djangorestframework==3.11.0
 djangorestframework-simplejwt==4.4.0
